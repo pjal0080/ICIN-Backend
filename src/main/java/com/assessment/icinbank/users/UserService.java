@@ -27,15 +27,17 @@ public class UserService implements UserDetailsService {
     public void registerNewUser(User newUser){
 
         Optional<User> user = userRepository.findUserByEmail(newUser.getEmail());
-        if(user == null){
+        System.out.println(user);
+        if(user.isPresent()){
+            throw new IllegalStateException("Email already exists");
+
+        }
+
+
             String encodedPassword = bCryptPasswordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
             userRepository.save(newUser);
-        }
 
-        else {
-            throw new IllegalStateException("Email already exists");
-        }
     }
 
 

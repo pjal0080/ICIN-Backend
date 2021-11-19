@@ -35,22 +35,19 @@ public class User implements UserDetails{
     @Column(name = "user_role")
     private UserRole userRole;
 
-    private Boolean enabled = true;
 
     public User(String firstName,
                 String lastName,
                 String email,
                 String password,
                 String phoneNo,
-                UserRole userRole,
-                Boolean enabled) {
+                UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
         this.userRole = userRole;
-        this.enabled = enabled;
     }
 
     @Override
@@ -81,6 +78,6 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 }
