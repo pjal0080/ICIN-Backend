@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,23 +28,30 @@ public class UserService implements UserDetailsService {
     public void registerNewUser(User newUser){
 
         Optional<User> user = userRepository.findUserByEmail(newUser.getEmail());
+
         System.out.println(user);
         if(user.isPresent()){
             throw new IllegalStateException("Email already exists");
-
         }
-
-
             String encodedPassword = bCryptPasswordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
+            newUser.setEnabled(false);
             userRepository.save(newUser);
 
     }
 
     public Optional<User> userProfile(String email){
-
         return userRepository.findUserByEmail(email);
+    }
 
+    public List<User> userProfiles(){
+        return userRepository.findAllByUserRole("USER");
+    }
+
+    public void enableProfile(String email){
+        User user = (User) loadUserByUsername(email);
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 
 

@@ -1,5 +1,8 @@
 package com.assessment.icinbank.users;
 
+import com.assessment.icinbank.accounts.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,19 +38,25 @@ public class User implements UserDetails{
     @Column(name = "user_role")
     private UserRole userRole;
 
+    private Boolean enabled = false;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Account account;
 
     public User(String firstName,
                 String lastName,
                 String email,
                 String password,
                 String phoneNo,
-                UserRole userRole) {
+                UserRole userRole,
+                Boolean enabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
         this.userRole = userRole;
+        this.enabled = enabled;
     }
 
     @Override
@@ -78,6 +87,6 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
