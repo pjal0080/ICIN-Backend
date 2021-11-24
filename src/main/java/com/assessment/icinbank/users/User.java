@@ -1,9 +1,10 @@
 package com.assessment.icinbank.users;
 
 import com.assessment.icinbank.accounts.Account;
+import com.assessment.icinbank.accounts.AccountView;
 import com.assessment.icinbank.accounts.PrimaryAccount;
 import com.assessment.icinbank.accounts.SavingsAccount;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -72,6 +73,7 @@ public class User implements UserDetails{
         return password;
     }
 
+    @JsonView(AccountView.Base.class)
     @Override
     public String getUsername() {
         return email;

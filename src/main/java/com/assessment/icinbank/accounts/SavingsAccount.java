@@ -2,6 +2,7 @@ package com.assessment.icinbank.accounts;
 
 import com.assessment.icinbank.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class SavingsAccount extends Account{
 
+    @JsonView(AccountView.Savings.class)
     @Column(name = "interest_rate")
     private Integer rate;
 
