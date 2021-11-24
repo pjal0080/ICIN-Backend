@@ -7,42 +7,26 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "accounts")
-@Data
+@MappedSuperclass
 @NoArgsConstructor
-public class Account {
+@Data
+public abstract class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(name = "primary_account")
-    private Long paccountNo;
-    @Column(name = "savings_account")
-    private Long saccountNo;
-
-    @Column(name = "primary_balance")
-    private Long pbalance;
-    @Column(name = "savings_balance")
-    private Long sbalance;
+    private Long balance;
+    @Column(name = "account_no")
+    private String accountNo;
 
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id",nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
-
-    public Account(Long paccountNo,
-                   Long saccountNo,
-                   Long pbalance,
-                   Long sbalance,
-                   User user) {
-        this.paccountNo = paccountNo;
-        this.saccountNo = saccountNo;
-        this.pbalance = pbalance;
-        this.sbalance = sbalance;
+    public Account(Long balance, String accountNo, User user) {
+        this.balance = balance;
+        this.accountNo = accountNo;
         this.user = user;
     }
-
 }

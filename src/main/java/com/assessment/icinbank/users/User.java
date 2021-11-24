@@ -1,9 +1,8 @@
 package com.assessment.icinbank.users;
 
 import com.assessment.icinbank.accounts.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
+import com.assessment.icinbank.accounts.PrimaryAccount;
+import com.assessment.icinbank.accounts.SavingsAccount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,7 +16,6 @@ import java.util.Collections;
 
 @Entity
 @Table(name = "users")
-@Data
 @NoArgsConstructor
 @ToString
 public class User implements UserDetails{
@@ -38,10 +36,14 @@ public class User implements UserDetails{
     @Column(name = "user_role")
     private UserRole userRole;
 
-    private Boolean enabled = false;
+    private Boolean enabled;
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Account account;
+    private PrimaryAccount primaryAccount;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private SavingsAccount savingsAccount;
+
 
     public User(String firstName,
                 String lastName,
@@ -63,6 +65,11 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(simpleGrantedAuthority);
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -88,5 +95,61 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

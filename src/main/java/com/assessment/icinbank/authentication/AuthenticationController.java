@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,9 @@ public class AuthenticationController {
             );
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect Username or Password");
+        }
+        catch(DisabledException e){
+            throw new DisabledException("User is disabled");
         }
 
         UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());

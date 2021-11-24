@@ -54,5 +54,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void disableProfile(String email){
+        User user = (User) loadUserByUsername(email);
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
+
 
 }

@@ -1,5 +1,9 @@
 package com.assessment.icinbank.admin;
 
+import com.assessment.icinbank.accounts.Account;
+import com.assessment.icinbank.accounts.AccountService;
+import com.assessment.icinbank.accounts.PrimaryAccount;
+import com.assessment.icinbank.accounts.SavingsAccount;
 import com.assessment.icinbank.users.User;
 import com.assessment.icinbank.users.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,7 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserService userService;
+    private final AccountService accountService;
 
     @GetMapping("/profile/{email}")
     public Optional<User> getAdminDetails(@PathVariable String email){
@@ -31,5 +36,19 @@ public class AdminController {
         userService.enableProfile(email);
     }
 
+    @PostMapping("/deactivate/{email}")
+    public void deactivateProfile(@PathVariable String email){
+        userService.disableProfile(email);
+    }
+
+    @PostMapping("/create_primary")
+    public void createPrimaryAccount(@RequestBody PrimaryAccount primaryAccount){
+        accountService.createPrimaryAccount(primaryAccount);
+    }
+
+    @PostMapping("/create_savings")
+    public void createSavingsAccount(@RequestBody SavingsAccount savingsAccount){
+        accountService.createSavingsAccount(savingsAccount);
+    }
 
 }
