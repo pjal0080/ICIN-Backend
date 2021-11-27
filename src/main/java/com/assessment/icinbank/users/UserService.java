@@ -1,5 +1,8 @@
 package com.assessment.icinbank.users;
 
+import com.assessment.icinbank.checkbook.CheckBook;
+import com.assessment.icinbank.checkbook.CheckBookRepository;
+import com.assessment.icinbank.checkbook.CheckBookRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +19,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CheckBookRepository checkBookRepository;
 
 
     @Override
@@ -59,6 +63,31 @@ public class UserService implements UserDetailsService {
         user.setEnabled(false);
         userRepository.save(user);
     }
+
+
+    public void requestCheckbook(CheckBookRequest checkBookRequest) throws UsernameNotFoundException{
+        User user = (User) loadUserByUsername(checkBookRequest.getUsername());
+        if(user != null){
+            checkBookRepository.save(new CheckBook(
+                    user.getUsername(),
+                    user.getId(),
+                    checkBookRequest.getAccountType(),
+                    false
+            ));
+        }
+        else{
+            throw new UsernameNotFoundException(String.format("User with email %s not found",checkBookRequest.getUsername()));
+        }
+
+    }
+
+    public Boolean getCheckBookStatus(Long userId){
+           CheckBook checkBook = checkBookRepository.findByUserId(userId);
+           return checkBook.getCheckBookStatus();
+    }
+
+
+
 
 
 

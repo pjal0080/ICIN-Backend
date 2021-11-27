@@ -3,6 +3,7 @@ package com.assessment.icinbank.accounts;
 import com.assessment.icinbank.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "savings_account")
 @NoArgsConstructor
+@Data
 public class SavingsAccount extends Account{
 
     @JsonView(AccountView.Savings.class)
@@ -24,12 +26,5 @@ public class SavingsAccount extends Account{
         this.rate = rate;
     }
 
-    public Integer getRate() {
-        return rate;
-    }
-
-    public void setRate(Integer rate) {
-        this.rate = rate;
-    }
 
 }

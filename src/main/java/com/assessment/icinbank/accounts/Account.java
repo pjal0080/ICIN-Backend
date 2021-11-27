@@ -1,10 +1,8 @@
 package com.assessment.icinbank.accounts;
-
 import com.assessment.icinbank.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -22,10 +20,11 @@ public abstract class Account {
     private Long balance;
 
     @JsonView(AccountView.Base.class)
-    @Column(name = "account_no")
+    @Column(name = "account_no",unique = true)
     private String accountNo;
 
-    @JsonView(AccountView.Base.class)
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id",nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -36,4 +35,5 @@ public abstract class Account {
         this.accountNo = accountNo;
         this.user = user;
     }
+
 }
