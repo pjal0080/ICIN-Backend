@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class RegistrationController {
 
     private final RegistrationService registrationService;

@@ -46,7 +46,16 @@ public class UserController {
 
     @PostMapping("/deposit/primary")
     public void depositToPrimaryAccount(@RequestBody TransactionHistoryRequest transactionHistoryRequest){
-            transactionService.depositToPrimary(transactionHistoryRequest.getAmount(),transactionHistoryRequest.getId());
+            transactionService.depositToPrimary(
+                    transactionHistoryRequest.getAmount(),
+                    transactionHistoryRequest.getId());
+    }
+
+    @PostMapping("/withdraw/primary")
+    public void withdrawFromPrimaryAccount(@RequestBody TransactionHistoryRequest transactionHistoryRequest) throws Exception {
+        transactionService.withdrawFromPrimary(
+                transactionHistoryRequest.getAmount(),
+                transactionHistoryRequest.getId());
     }
 
 }
