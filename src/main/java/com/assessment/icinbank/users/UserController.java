@@ -2,12 +2,14 @@ package com.assessment.icinbank.users;
 
 import com.assessment.icinbank.accounts.*;
 import com.assessment.icinbank.checkbook.CheckBookRequest;
+import com.assessment.icinbank.transactions.TransactionHistory;
 import com.assessment.icinbank.transactions.TransactionHistoryRequest;
 import com.assessment.icinbank.transactions.TransactionService;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -56,6 +58,25 @@ public class UserController {
         transactionService.withdrawFromPrimary(
                 transactionHistoryRequest.getAmount(),
                 transactionHistoryRequest.getId());
+    }
+
+    @PostMapping("/deposit/savings")
+    public void depositToSavingsAccount(@RequestBody TransactionHistoryRequest transactionHistoryRequest){
+        transactionService.depositToSavings(
+                transactionHistoryRequest.getAmount(),
+                transactionHistoryRequest.getId());
+    }
+
+    @PostMapping("/withdraw/savings")
+    public void withdrawFromSavingsAccount(@RequestBody TransactionHistoryRequest transactionHistoryRequest) throws Exception {
+        transactionService.withdrawFromSavings(
+                transactionHistoryRequest.getAmount(),
+                transactionHistoryRequest.getId());
+    }
+
+    @GetMapping("/transactions/{id}")
+    public List<TransactionHistory> getAllTransactionsByUserId(@PathVariable Long id){
+        return userService.getAllUserTransactions(id);
     }
 
 }

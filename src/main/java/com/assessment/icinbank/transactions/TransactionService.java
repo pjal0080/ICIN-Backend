@@ -3,6 +3,7 @@ package com.assessment.icinbank.transactions;
 
 import com.assessment.icinbank.accounts.PrimaryAccount;
 import com.assessment.icinbank.accounts.PrimaryAccountRepository;
+import com.assessment.icinbank.accounts.SavingsAccount;
 import com.assessment.icinbank.accounts.SavingsAccountRepository;
 import com.assessment.icinbank.users.User;
 import com.assessment.icinbank.users.UserRepository;
@@ -52,6 +53,51 @@ public class TransactionService {
             Long newAmount = oldAmount - amount;
             userAccount.setBalance(newAmount);
             primaryAccountRepository.save(userAccount);
+
+            transactionHistoryRepository.save(new TransactionHistory(
+                    amount,
+                    LocalDate.now(),
+                    LocalTime.now(),
+                    userAccount.getAccountNo(),
+                    user,
+                    TransactionType.withdrawal
+            ));
+
+        }
+
+
+    }
+
+    public void depositToSavings(Long amount,Long id){
+        User user = userRepository.findByUserId(id);
+        SavingsAccount userAccount = user.getSavingsAccount();
+        Long newAmount = userAccount.getBalance() + amount;
+        userAccount.setBalance(newAmount);
+        savingsAccountRepository.save(userAccount);
+
+
+        transactionHistoryRepository.save(new TransactionHistory(
+                amount,
+                LocalDate.now(),
+                LocalTime.now(),
+                userAccount.getAccountNo(),
+                user,
+                TransactionType.deposit
+        ));
+    }
+
+    public void withdrawFromSavings(Long amount,Long id) throws Exception {
+        User user = userRepository.findByUserId(id);
+        SavingsAccount userAccount = user.getSavingsAccount();
+        Long oldAmount = userAccount.getBalance();
+        if(oldAmount < amount || oldAmount == 0){
+            throw new Exception("Amount can not be withdrawn");
+        }
+
+        else{
+            Long newAmount = oldAmount - amount;
+            userAccount.setBalance(newAmount);
+            savingsAccountRepository.save(userAccount);
 
             transactionHistoryRepository.save(new TransactionHistory(
                     amount,

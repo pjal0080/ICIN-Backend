@@ -3,6 +3,7 @@ package com.assessment.icinbank.users;
 import com.assessment.icinbank.checkbook.CheckBook;
 import com.assessment.icinbank.checkbook.CheckBookRepository;
 import com.assessment.icinbank.checkbook.CheckBookRequest;
+import com.assessment.icinbank.transactions.TransactionHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -87,8 +88,8 @@ public class UserService implements UserDetailsService {
     }
 
 
-
-
-
-
+    public List<TransactionHistory> getAllUserTransactions(Long id) {
+        User user = userRepository.findByUserId(id);
+        return user.getTransactionHistoryList();
+    }
 }

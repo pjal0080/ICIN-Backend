@@ -24,7 +24,6 @@ public abstract class Account {
     private String accountNo;
 
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id",nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
