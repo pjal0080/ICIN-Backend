@@ -1,6 +1,5 @@
 package com.assessment.icinbank.authentication;
 
-import com.assessment.icinbank.users.User;
 import com.assessment.icinbank.users.UserService;
 import com.assessment.icinbank.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class AuthenticationController {
         UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt,(User) userDetails));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
 
     }
 
