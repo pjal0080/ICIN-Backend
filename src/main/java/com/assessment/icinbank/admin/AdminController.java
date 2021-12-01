@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/admin")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*",allowedHeaders = "*")
+@RequestMapping(value = "/admin")
 public class AdminController {
 
     private final UserService userService;
