@@ -14,5 +14,5 @@ public class CheckBookRequest {
 
     @Enumerated(EnumType.STRING)
     private CheckBookType accountType;
-    private String username;
+    private Long userId;
 }

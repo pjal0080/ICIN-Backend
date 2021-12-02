@@ -66,8 +66,9 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void requestCheckbook(CheckBookRequest checkBookRequest) throws UsernameNotFoundException{
-        User user = (User) loadUserByUsername(checkBookRequest.getUsername());
+    public void requestCheckbook(CheckBookRequest checkBookRequest){
+        User user = userRepository.findByUserId(checkBookRequest.getUserId());
+
         if(user != null){
             checkBookRepository.save(new CheckBook(
                     user.getUsername(),
@@ -76,14 +77,12 @@ public class UserService implements UserDetailsService {
                     false
             ));
         }
-        else{
-            throw new UsernameNotFoundException(String.format("User with email %s not found",checkBookRequest.getUsername()));
-        }
+
 
     }
 
-    public Boolean getCheckBookStatus(Long userId){
-           CheckBook checkBook = checkBookRepository.findByUserId(userId);
+    public Boolean getPrimaryCheckBookStatus(Long userId){
+           CheckBook checkBook = checkBookRepository.findByUserIdAndType(userId,"PRIMARY");
            return checkBook.getCheckBookStatus();
     }
 
@@ -92,4 +91,10 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUserId(id);
         return user.getTransactionHistoryList();
     }
+
+    public Boolean getSavingsCheckBookStatus(Long userId) {
+        CheckBook checkBook = checkBookRepository.findByUserIdAndType(userId,"SAVINGS");
+        return checkBook.getCheckBookStatus();
+    }
+
 }

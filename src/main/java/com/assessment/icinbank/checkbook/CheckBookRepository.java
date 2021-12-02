@@ -10,10 +10,9 @@ import java.util.List;
 @Repository
 public interface CheckBookRepository extends JpaRepository<CheckBook,Long> {
 
-    @Query(value = "SELECT * FROM checkbooks WHERE user_id=:userId",nativeQuery = true)
-    CheckBook findByUserId(@Param("userId") Long userId);
-
     @Query(value = "SELECT * FROM checkbooks WHERE status=:status",nativeQuery = true)
     List<CheckBook> findAllByStatus(@Param("status") Boolean status);
 
+    @Query(value = "SELECT * FROM checkbooks WHERE user_id=:userId AND account_type=:accountType",nativeQuery = true)
+    CheckBook findByUserIdAndType(@Param("userId") Long userId, @Param("accountType") String accountType);
 }

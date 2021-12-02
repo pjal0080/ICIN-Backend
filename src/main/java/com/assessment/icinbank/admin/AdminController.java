@@ -56,13 +56,39 @@ public class AdminController {
     }
 
     @GetMapping("/checkbooks")
-    public List<CheckBook> getCheckbookRequests(){
+    public List<CheckBook> getCheckBookRequests(){
         return checkBookService.getAllCheckBooks();
     }
 
-    @PostMapping("/checkbook/confirm/{userid}")
-    public void confirmCheckBookRequest(@PathVariable Long userId){
-        checkBookService.grantCheckBook(userId);
+    @PostMapping("/checkbook/confirm/primary/{userId}")
+    public Integer confirmPrimaryCheckBookRequest(@PathVariable Long userId){
+
+        Integer status;
+        try {
+            checkBookService.grantPrimaryCheckBook(userId);
+            status = 1;
+
+        }
+        catch (Exception e){
+            status = 0;
+
+        }
+        return status;
+    }
+
+    @PostMapping("/checkbook/confirm/savings/{userId}")
+    public Integer confirmSavingsCheckBookRequest(@PathVariable Long userId){
+
+        Integer status;
+        try{
+            checkBookService.grantSavingsCheckBook(userId);
+            status = 1;
+        }
+        catch (Exception e){
+            status = 0;
+        }
+
+        return status;
     }
 
 

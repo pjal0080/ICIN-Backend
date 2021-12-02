@@ -15,9 +15,17 @@ public class CheckBookService {
         return checkBookRepository.findAllByStatus(false);
     }
 
-    public void grantCheckBook(Long userId) {
-       CheckBook checkBook =  checkBookRepository.findByUserId(userId);
+    public void grantPrimaryCheckBook(Long userId) {
+       CheckBook checkBook =  checkBookRepository.findByUserIdAndType(userId,"PRIMARY");
        checkBook.setCheckBookStatus(true);
        checkBookRepository.save(checkBook);
     }
+
+    public void grantSavingsCheckBook(Long userId){
+        CheckBook checkBook = checkBookRepository.findByUserIdAndType(userId,"SAVINGS");
+        checkBook.setCheckBookStatus(true);
+        checkBookRepository.save(checkBook);
+    }
+
+
 }
