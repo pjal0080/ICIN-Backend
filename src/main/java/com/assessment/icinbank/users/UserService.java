@@ -66,18 +66,24 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void requestCheckbook(CheckBookRequest checkBookRequest){
+    public void requestCheckbook(CheckBookRequest checkBookRequest) throws Exception {
         User user = userRepository.findByUserId(checkBookRequest.getUserId());
+        CheckBook checkBook = checkBookRepository.findByUserIdAndType(checkBookRequest.getUserId(),checkBookRequest.getAccountType().name());
+        if(checkBook == null) {
+            if (user != null) {
+                checkBookRepository.save(new CheckBook(
+                        user.getUsername(),
+                        user.getId(),
+                        checkBookRequest.getAccountType(),
+                        false
+                ));
+            }
 
-        if(user != null){
-            checkBookRepository.save(new CheckBook(
-                    user.getUsername(),
-                    user.getId(),
-                    checkBookRequest.getAccountType(),
-                    false
-            ));
         }
 
+        else{
+            throw new Exception("Checkbook request already made");
+        }
 
     }
 

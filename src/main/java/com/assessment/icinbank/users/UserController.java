@@ -40,17 +40,18 @@ public class UserController {
     }
 
     @PostMapping("/request/checkbook")
-    public CheckBookType requestCheckBook(@RequestBody CheckBookRequest checkBookRequest){
+    public Integer requestCheckBook(@RequestBody CheckBookRequest checkBookRequest){
         Integer status;
         try{
             userService.requestCheckbook(checkBookRequest);
             status = 1;
         }
         catch (Exception e){
+            System.out.println(e);
             status = 0;
         }
 
-        return checkBookRequest.getAccountType();
+        return status;
     }
 
     @GetMapping("/checkbook/status/primary/{userId}")
