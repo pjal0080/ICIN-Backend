@@ -6,6 +6,7 @@ import com.assessment.icinbank.checkbook.CheckBookType;
 import com.assessment.icinbank.transactions.TransactionHistory;
 import com.assessment.icinbank.transactions.TransactionHistoryRequest;
 import com.assessment.icinbank.transactions.TransactionService;
+import com.assessment.icinbank.transactions.TransferRequest;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -95,5 +96,28 @@ public class UserController {
     public List<TransactionHistory> getAllTransactionsByUserId(@PathVariable Long id){
         return userService.getAllUserTransactions(id);
     }
+
+    @PutMapping("/update/{id}")
+    public int updateProfile(@PathVariable Long id, @RequestBody User user){
+        int status;
+        try{
+            userService.updateUserProfile(id,user);
+            status = 1;
+        }
+        catch (Exception e){
+            status = -1;
+            System.out.println(e);
+        }
+
+        return status;
+    }
+
+
+    @PostMapping("/transfer")
+    public void makeTransfer(@RequestBody TransferRequest transferRequest) throws Exception {
+        transactionService.transfer(transferRequest);
+    }
+
+
 
 }

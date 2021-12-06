@@ -97,4 +97,14 @@ public class UserService implements UserDetailsService {
         return checkBook.getCheckBookStatus();
     }
 
+    public void updateUserProfile(Long id, User user) {
+        User newUser = userRepository.findByUserId(id);
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        newUser.setPhoneNo(user.getPhoneNo());
+        userRepository.save(newUser);
+
+    }
 }

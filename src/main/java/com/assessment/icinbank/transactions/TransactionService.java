@@ -1,6 +1,5 @@
 package com.assessment.icinbank.transactions;
 
-
 import com.assessment.icinbank.accounts.PrimaryAccount;
 import com.assessment.icinbank.accounts.PrimaryAccountRepository;
 import com.assessment.icinbank.accounts.SavingsAccount;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -113,7 +113,71 @@ public class TransactionService {
 
     }
 
-    public void transfer(){
+    public void transfer(TransferRequest transferRequest) throws Exception {
+        Optional<User> receiver = userRepository.findUserByEmail(
+                transferRequest.getReceiverUsername()
+        );
+        String accountType =  transferRequest.getSenderAccountType();
+        System.out.println(accountType);
+        if(accountType.equals("PRIMARY")){
+            System.out.println("Inside PRIMARY");
+            withdrawFromPrimary(transferRequest.getAmount(), transferRequest.getSenderId());
+            String receiverPrimaryAccount = receiver.get().getPrimaryAccount().getAccountNo();
+
+            if(transferRequest.getReceiverAccountNo().equals(receiverPrimaryAccount)){
+                depositToPrimary(transferRequest.getAmount(),receiver.get().getId());
+            }
+
+            else {
+                depositToSavings(transferRequest.getAmount(),receiver.get().getId());
+            }
+
+        }
+
+        else {
+            System.out.println("inside SAVINGS");
+            withdrawFromSavings(transferRequest.getAmount(),transferRequest.getSenderId());
+            String receiverPrimaryAccount = receiver.get().getPrimaryAccount().getAccountNo();
+
+            if(transferRequest.getReceiverAccountNo().equals(receiverPrimaryAccount)){
+                System.out.println("Inside receiver Primary");
+                depositToPrimary(transferRequest.getAmount(),receiver.get().getId());
+            }
+
+            else {
+                depositToSavings(transferRequest.getAmount(),receiver.get().getId());
+            }
+
+
+        }
+
+        User sender = userRepository.findByUserId(transferRequest.getSenderId());
+
+        if(accountType.equals("PRIMARY"))
+        {
+            transferRepository.save(new Transfer(
+                    transferRequest.getAmount(),
+                    LocalDate.now(),
+                    LocalTime.now(),
+                    sender.getPrimaryAccount().getAccountNo(),
+                    sender.getUsername(),
+                    transferRequest.getReceiverAccountNo(),
+                    transferRequest.getReceiverUsername()
+            ));
+        }
+        else{
+            transferRepository.save(new Transfer(
+                    transferRequest.getAmount(),
+                    LocalDate.now(),
+                    LocalTime.now(),
+                    sender.getSavingsAccount().getAccountNo(),
+                    sender.getUsername(),
+                    transferRequest.getReceiverAccountNo(),
+                    transferRequest.getReceiverUsername()
+            ));
+        }
+
+
 
     }
 
