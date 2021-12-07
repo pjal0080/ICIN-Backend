@@ -118,34 +118,47 @@ public class TransactionService {
                 transferRequest.getReceiverUsername()
         );
         String accountType =  transferRequest.getSenderAccountType();
+        String receiverPrimaryAccount = receiver.get().getPrimaryAccount().getAccountNo();
+        String receiverSavingsAccount = receiver.get().getSavingsAccount().getAccountNo();
+
         System.out.println(accountType);
         if(accountType.equals("PRIMARY")){
             System.out.println("Inside PRIMARY");
-            withdrawFromPrimary(transferRequest.getAmount(), transferRequest.getSenderId());
-            String receiverPrimaryAccount = receiver.get().getPrimaryAccount().getAccountNo();
+
+
 
             if(transferRequest.getReceiverAccountNo().equals(receiverPrimaryAccount)){
                 depositToPrimary(transferRequest.getAmount(),receiver.get().getId());
+                withdrawFromPrimary(transferRequest.getAmount(), transferRequest.getSenderId());
             }
 
-            else {
+            else if(transferRequest.getReceiverAccountNo().equals(receiverSavingsAccount)){
                 depositToSavings(transferRequest.getAmount(),receiver.get().getId());
+                withdrawFromPrimary(transferRequest.getAmount(), transferRequest.getSenderId());
+            }
+
+            else{
+                throw new Exception("Account Number does not exist");
             }
 
         }
 
         else {
             System.out.println("inside SAVINGS");
-            withdrawFromSavings(transferRequest.getAmount(),transferRequest.getSenderId());
-            String receiverPrimaryAccount = receiver.get().getPrimaryAccount().getAccountNo();
 
             if(transferRequest.getReceiverAccountNo().equals(receiverPrimaryAccount)){
                 System.out.println("Inside receiver Primary");
                 depositToPrimary(transferRequest.getAmount(),receiver.get().getId());
+                withdrawFromSavings(transferRequest.getAmount(),transferRequest.getSenderId());
             }
 
-            else {
+            else if(transferRequest.getReceiverAccountNo().equals(receiverSavingsAccount)){
                 depositToSavings(transferRequest.getAmount(),receiver.get().getId());
+                withdrawFromSavings(transferRequest.getAmount(),transferRequest.getSenderId());
+            }
+
+            else{
+                throw new Exception("Account Number does not exist");
             }
 
 

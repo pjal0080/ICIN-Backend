@@ -89,6 +89,9 @@ public class UserService implements UserDetailsService {
 
     public Boolean getPrimaryCheckBookStatus(Long userId){
            CheckBook checkBook = checkBookRepository.findByUserIdAndType(userId,"PRIMARY");
+           if(checkBook == null){
+               return false;
+           }
            return checkBook.getCheckBookStatus();
     }
 
@@ -100,6 +103,9 @@ public class UserService implements UserDetailsService {
 
     public Boolean getSavingsCheckBookStatus(Long userId) {
         CheckBook checkBook = checkBookRepository.findByUserIdAndType(userId,"SAVINGS");
+        if(checkBook == null){
+            return false;
+        }
         return checkBook.getCheckBookStatus();
     }
 

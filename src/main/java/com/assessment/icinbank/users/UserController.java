@@ -115,8 +115,17 @@ public class UserController {
 
 
     @PostMapping("/transfer")
-    public void makeTransfer(@RequestBody TransferRequest transferRequest) throws Exception {
-        transactionService.transfer(transferRequest);
+    public Integer makeTransfer(@RequestBody TransferRequest transferRequest) throws Exception {
+        Integer status;
+        try{
+            transactionService.transfer(transferRequest);
+            status = 1;
+        }
+        catch (Exception e){
+            status = 0;
+        }
+
+        return status;
     }
 
 
