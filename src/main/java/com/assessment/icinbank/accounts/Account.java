@@ -26,7 +26,7 @@ public abstract class Account {
     @Getter(AccessLevel.NONE)
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id",nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     public Account(Long balance, String accountNo, User user) {
